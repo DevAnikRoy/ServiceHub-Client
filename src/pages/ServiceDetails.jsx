@@ -25,7 +25,7 @@ export default function ServiceDetails() {
         _id: '1',
         serviceName: 'Plumbing Repair',
         description: 'Professional plumbing services including pipe repair, leak fixing, and drain cleaning. Our certified plumbers ensure quality work with guaranteed results. We use modern equipment and techniques to diagnose and fix any plumbing issues in your home or office. From minor leaks to major pipe replacements, we handle it all with expertise and professionalism.',
-        imageURL: 'https://images.pexels.com/photos/8486944/pexels-photo-8486944.jpeg',
+        imageURL: 'https://www.robinsonsplumbingservice.com/wp-content/uploads/2022/06/AdobeStock_187023351-1024x696.jpeg',
         price: '89',
         serviceArea: 'New York',
         providerName: 'John Smith',

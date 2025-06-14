@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Wrench, Facebook, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Wrench, Linkedin, Mail, Phone, MapPin, Github, BriefcaseBusiness } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -26,17 +26,24 @@ export default function Footer() {
             <div className="flex space-x-4">
               <motion.a
                 whileHover={{ scale: 1.1 }}
-                href="#"
+                href="https://github.com/DevAnikRoy"
                 className="p-2 bg-gray-800 rounded-lg hover:bg-blue-600 transition-colors"
               >
-                <Facebook className="h-5 w-5" />
+                <Github className="h-5 w-5" />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1 }}
-                href="#"
+                href="https://www.linkedin.com/in/anik-roy-2171621b3/"
                 className="p-2 bg-gray-800 rounded-lg hover:bg-blue-600 transition-colors"
               >
                 <Linkedin className="h-5 w-5" />
+              </motion.a>
+              <motion.a
+                whileHover={{ scale: 1.1 }}
+                href="http://anikdigital.com/"
+                className="p-2 bg-gray-800 rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                <BriefcaseBusiness className="h-5 w-5" />
               </motion.a>
             </div>
           </motion.div>
@@ -77,15 +84,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400">support@servicehub.com</span>
+                <span className="text-gray-400">anikroy302@.com</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400">+1 (555) 123-4567</span>
+                <span className="text-gray-400">+8801722718821</span>
               </li>
               <li className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400">New York, NY</span>
+                <span className="text-gray-400">East Rampura, Dhaka</span>
               </li>
             </ul>
           </motion.div>
