@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Wrench, Linkedin, Mail, Phone, MapPin, Github, BriefcaseBusiness } from 'lucide-react';
+import { Wrench, Linkedin, Mail, Phone, MapPin, Github, Globe,  } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -43,7 +43,7 @@ export default function Footer() {
                 href="http://anikdigital.com/"
                 className="p-2 bg-gray-800 rounded-lg hover:bg-blue-600 transition-colors"
               >
-                <BriefcaseBusiness className="h-5 w-5" />
+                <Globe className="h-5 w-5" />
               </motion.a>
             </div>
           </motion.div>
@@ -103,6 +103,9 @@ export default function Footer() {
           <p className="text-gray-400">
             © {new Date().getFullYear()} ServiceHub. All rights reserved.
           </p>
+        </div>
+        <div className='flex justify-center items-center mt-5 text-gray-600'>
+          <p>Dev-Anik-Roy</p>
         </div>
       </div>
     </footer>
