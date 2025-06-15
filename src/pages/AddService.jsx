@@ -66,14 +66,12 @@ export default function AddService() {
           className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8"
         >
           <div className="text-center mb-8">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.1 }}
+            <div
+              
               className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full flex items-center justify-center mb-4"
             >
               <Plus className="h-8 w-8 text-white" />
-            </motion.div>
+            </div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               Add New Service
             </h1>
