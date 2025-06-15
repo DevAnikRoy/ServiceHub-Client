@@ -47,18 +47,39 @@ export default function ManageServices() {
   };
 
   const handleDeleteService = async (serviceId, serviceName) => {
-    const confirmed = window.confirm(`Are you sure you want to delete "${serviceName}"? This action cannot be undone.`);
-    
-    if (!confirmed) return;
+  // Show confirmation toast
+  toast((t) => (
+    <span>
+      Are you sure you want to delete <b>"{serviceName}"</b>?
+      <div className="mt-2 flex justify-end gap-2">
+        <button
+          className="px-3 py-1 bg-red-600 text-white rounded"
+          onClick={async () => {
+            toast.dismiss(t.id); 
 
-    try {
-      // Simulate API call
-      setServices(services.filter(service => service._id !== serviceId));
-      toast.success('Service deleted successfully!');
-    } catch (error) {
-      toast.error('Failed to delete service');
-    }
-  };
+            try {
+              // Simulate API call or logic
+              setServices((prev) => prev.filter(service => service._id !== serviceId));
+              toast.success('Service deleted successfully!');
+            } catch (error) {
+              toast.error('Failed to delete service');
+            }
+          }}
+        >
+          Yes
+        </button>
+        <button
+          className="px-3 py-1 bg-gray-300 text-black rounded"
+          onClick={() => toast.dismiss(t.id)}
+        >
+          Cancel
+        </button>
+      </div>
+    </span>
+  ), {
+    duration: Infinity,
+  });
+};
 
   if (loading) {
     return (

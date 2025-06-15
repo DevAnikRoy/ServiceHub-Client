@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, json } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, Chrome } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,11 +12,11 @@ export default function Login() {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  
+
   const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const from = location.state?.from?.pathname || '/';
 
   useState(() => {
@@ -25,7 +25,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.email || !formData.password) {
       toast.error('Please fill in all fields');
       return;
@@ -33,7 +33,26 @@ export default function Login() {
 
     setLoading(true);
     try {
-      await login(formData.email, formData.password);
+      const result = await login(formData.email, formData.password);
+      console.log(result)
+      if (result.user.uid) {
+        fetch('http://localhost:3000/login', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            
+          },
+          body: JSON.stringify({ email: formData.email, password: formData.password })
+        })
+          .then(res => res.json())  // parse JSON from response
+          .then(data => {
+            console.log(data.token);  // now you get the actual token
+            localStorage.setItem('tokens', data.token);
+          })
+          .catch(error => {
+            console.error('Login error:', error);
+          });
+      }
       toast.success('Logged in successfully!');
       navigate(from, { replace: true });
     } catch (error) {
@@ -86,7 +105,7 @@ export default function Login() {
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="Enter your email"
                 required
@@ -103,7 +122,7 @@ export default function Login() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="Enter your password"
                 required

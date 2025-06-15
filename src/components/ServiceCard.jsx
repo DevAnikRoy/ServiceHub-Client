@@ -12,11 +12,11 @@ export default function ServiceCard({ service, showViewDetails = true }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
       className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
     >
       <div className="relative overflow-hidden">
         <img
+        loading='lazy'
           src={service.imageURL}
           alt={service.serviceName}
           className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
