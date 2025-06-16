@@ -13,76 +13,12 @@ export default function Home() {
   }, []);
 
   const fetchPopularServices = async () => {
-    // Mock data for popular services
-    const mockServices = [
-      {
-        _id: '1',
-        serviceName: 'Plumbing Repair',
-        description: 'Professional plumbing services including pipe repair, leak fixing, and drain cleaning. Our certified plumbers ensure quality work.',
-        imageURL: 'https://www.robinsonsplumbingservice.com/wp-content/uploads/2022/06/AdobeStock_187023351-1024x696.jpeg',
-        price: '89',
-        serviceArea: 'New York',
-        providerName: 'John Smith',
-        providerImage: 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg',
-        providerEmail: 'john@example.com'
-      },
-      {
-        _id: '2',
-        serviceName: 'Electrical Installation',
-        description: 'Complete electrical services for homes and offices. Licensed electricians providing safe and reliable installations.',
-        imageURL: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg',
-        price: '125',
-        serviceArea: 'Los Angeles',
-        providerName: 'Sarah Johnson',
-        providerImage: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg',
-        providerEmail: 'sarah@example.com'
-      },
-      {
-        _id: '3',
-        serviceName: 'AC Repair & Maintenance',
-        description: 'Expert air conditioning repair and maintenance services. Keep your home cool and comfortable year-round.',
-        imageURL: 'https://images.pexels.com/photos/2098428/pexels-photo-2098428.jpeg',
-        price: '95',
-        serviceArea: 'Chicago',
-        providerName: 'Mike Davis',
-        providerImage: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg',
-        providerEmail: 'mike@example.com'
-      },
-      {
-        _id: '4',
-        serviceName: 'Kitchen Renovation',
-        description: 'Transform your kitchen with our complete renovation services. Modern designs and quality craftsmanship guaranteed.',
-        imageURL: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg',
-        price: '2500',
-        serviceArea: 'Miami',
-        providerName: 'Emily Brown',
-        providerImage: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
-        providerEmail: 'emily@example.com'
-      },
-      {
-        _id: '5',
-        serviceName: 'House Painting',
-        description: 'Professional interior and exterior painting services. High-quality paints and expert application for lasting results.',
-        imageURL: 'https://images.pexels.com/photos/1669799/pexels-photo-1669799.jpeg',
-        price: '450',
-        serviceArea: 'Houston',
-        providerName: 'David Wilson',
-        providerImage: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg',
-        providerEmail: 'david@example.com'
-      },
-      {
-        _id: '6',
-        serviceName: 'Garden Landscaping',
-        description: 'Beautiful garden design and landscaping services. Create your dream outdoor space with our expert team.',
-        imageURL: 'https://images.pexels.com/photos/1453499/pexels-photo-1453499.jpeg',
-        price: '800',
-        serviceArea: 'Seattle',
-        providerName: 'Lisa Garcia',
-        providerImage: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg',
-        providerEmail: 'lisa@example.com'
-      }
-    ];
-    setPopularServices(mockServices);
+    
+    fetch('http://localhost:3000/featuredservices')
+    .then(res => res.json())
+    .then(data => setPopularServices(data));
+    
+    ;
   };
 
   const features = [
