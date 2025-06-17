@@ -14,7 +14,7 @@ export default function AddService() {
     description: ''
   });
   const [loading, setLoading] = useState(false);
-  
+
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ export default function AddService() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.imageURL || !formData.serviceName || !formData.price || !formData.serviceArea || !formData.description) {
       toast.error('Please fill in all fields');
       return;
@@ -39,23 +39,34 @@ export default function AddService() {
     try {
       const serviceData = {
         ...formData,
-        price: parseFloat(formData.price),
-        providerName: currentUser.displayName || currentUser.email,
-        providerImage: currentUser.photoURL || 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg',
-        providerEmail: currentUser.email,
-        createdAt: new Date().toISOString()
+        price: parseFloat(formData.price)
       };
-      
-      // Simulate API call
-      console.log('Adding service:', serviceData);
-      
+
+      const token = localStorage.getItem("token");
+
+      const res = await fetch('http://localhost:3000/addservice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(serviceData)
+      });
+
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+      }
+
       toast.success('Service added successfully!');
       navigate('/manage-services');
     } catch (error) {
-      toast.error('Failed to add service');
+      console.error("Add service failed:", error);
+      toast.error(error.message || 'Failed to add service');
     }
     setLoading(false);
   };
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
@@ -67,7 +78,7 @@ export default function AddService() {
         >
           <div className="text-center mb-8">
             <div
-              
+
               className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full flex items-center justify-center mb-4"
             >
               <Plus className="h-8 w-8 text-white" />
@@ -90,24 +101,12 @@ export default function AddService() {
                 <input
                   type="url"
                   value={formData.imageURL}
-                  onChange={(e) => setFormData({...formData, imageURL: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, imageURL: e.target.value })}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   placeholder="Enter image URL"
                   required
                 />
               </div>
-              {formData.imageURL && (
-                <div className="mt-2">
-                  <img
-                    src={formData.imageURL}
-                    alt="Service preview"
-                    className="w-full h-32 object-cover rounded-lg"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                </div>
-              )}
             </div>
 
             <div>
@@ -119,7 +118,7 @@ export default function AddService() {
                 <input
                   type="text"
                   value={formData.serviceName}
-                  onChange={(e) => setFormData({...formData, serviceName: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, serviceName: e.target.value })}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   placeholder="Enter service name"
                   required
@@ -139,7 +138,7 @@ export default function AddService() {
                     min="0"
                     step="0.01"
                     value={formData.price}
-                    onChange={(e) => setFormData({...formData, price: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     placeholder="0.00"
                     required
@@ -155,7 +154,7 @@ export default function AddService() {
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <select
                     value={formData.serviceArea}
-                    onChange={(e) => setFormData({...formData, serviceArea: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, serviceArea: e.target.value })}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     required
                   >
@@ -165,28 +164,6 @@ export default function AddService() {
                     <option value="Chicago">Chicago</option>
                     <option value="Houston">Houston</option>
                     <option value="Phoenix">Phoenix</option>
-                    <option value="Philadelphia">Philadelphia</option>
-                    <option value="San Antonio">San Antonio</option>
-                    <option value="San Diego">San Diego</option>
-                    <option value="Dallas">Dallas</option>
-                    <option value="San Jose">San Jose</option>
-                    <option value="Austin">Austin</option>
-                    <option value="Jacksonville">Jacksonville</option>
-                    <option value="Fort Worth">Fort Worth</option>
-                    <option value="Columbus">Columbus</option>
-                    <option value="Charlotte">Charlotte</option>
-                    <option value="San Francisco">San Francisco</option>
-                    <option value="Indianapolis">Indianapolis</option>
-                    <option value="Seattle">Seattle</option>
-                    <option value="Denver">Denver</option>
-                    <option value="Boston">Boston</option>
-                    <option value="Nashville">Nashville</option>
-                    <option value="Las Vegas">Las Vegas</option>
-                    <option value="Louisville">Louisville</option>
-                    <option value="Portland">Portland</option>
-                    <option value="Memphis">Memphis</option>
-                    <option value="Miami">Miami</option>
-                    <option value="Atlanta">Atlanta</option>
                   </select>
                 </div>
               </div>
@@ -200,7 +177,7 @@ export default function AddService() {
                 <FileText className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={6}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
                   placeholder="Describe your service in detail..."

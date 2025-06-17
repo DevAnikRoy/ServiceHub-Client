@@ -25,13 +25,22 @@ export function AuthProvider({ children }) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, {
       displayName: name,
-      photoURL: photoURL
+      photoURL
     });
 
-    // Generate JWT token
-    const userToken = await generateToken(result.user);
-    localStorage.setItem('token', userToken);
-    setToken(userToken);
+    const res = await fetch("http://localhost:3000/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        name,
+        imageUrl: photoURL
+      })
+    });
+
+    const data = await res.json();
+    localStorage.setItem("token", data.token);
+    setToken(data.token);
 
     return result;
   }
@@ -39,10 +48,15 @@ export function AuthProvider({ children }) {
   async function login(email, password) {
     const result = await signInWithEmailAndPassword(auth, email, password);
 
-    // Generate JWT token
-    const userToken = await generateToken(result.user);
-    localStorage.setItem('token', userToken);
-    setToken(userToken);
+    const res = await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    localStorage.setItem("token", data.token);
+    setToken(data.token);
 
     return result;
   }
@@ -50,67 +64,60 @@ export function AuthProvider({ children }) {
   async function loginWithGoogle() {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
+    const { email, displayName, photoURL } = result.user;
 
-    // Generate JWT token
-    const userToken = await generateToken(result.user);
-    localStorage.setItem('token', userToken);
-    setToken(userToken);
+    const res = await fetch("http://localhost:3000/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        name: displayName,
+        imageUrl: photoURL
+      })
+    });
+
+    const data = await res.json();
+    localStorage.setItem("token", data.token);
+    setToken(data.token);
 
     return result;
   }
 
   async function logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setToken(null);
-    return signOut(auth);
-  }
-
-  async function generateToken(user) {
-    // Simple JWT simulation - in production, this should be done server-side
-    const tokenData = {
-      uid: user.uid,
-      email: user.email,
-      name: user.displayName,
-      exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
-    };
-    return btoa(JSON.stringify(tokenData));
+    await signOut(auth);
+    setCurrentUser(null);
   }
 
   useEffect(() => {
     const fetchMe = async () => {
-      const token = localStorage.getItem("token");
       if (!token) return;
+      try {
+        const res = await fetch("http://localhost:3000/me", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-      const res = await fetch("http://localhost:3000/me", {
-        headers: {
-          Authorization: `Bearer ${token}`
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentUser(data);
         }
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setCurrentUser(data);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
       }
     };
 
     fetchMe();
   }, [token]);
 
-
-
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      // setCurrentUser(user);
-      if (user && !token) {
-        const userToken = await generateToken(user);
-        localStorage.setItem('token', userToken);
-        setToken(userToken);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(false);
     });
-
     return unsubscribe;
-  }, [token]);
+  }, []);
 
   const value = {
     currentUser,
