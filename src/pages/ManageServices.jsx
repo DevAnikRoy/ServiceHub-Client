@@ -16,38 +16,25 @@ export default function ManageServices() {
   }, []);
 
   const fetchMyServices = async () => {
-    // Mock data for user's services
-    const mockServices = [
-      {
-        _id: '1',
-        serviceName: 'Plumbing Repair Service',
-        description: 'Professional plumbing services including pipe repair, leak fixing, and drain cleaning.',
-        imageURL: 'https://images.pexels.com/photos/8486944/pexels-photo-8486944.jpeg',
-        price: '89',
-        serviceArea: 'New York',
-        providerName: currentUser?.displayName || 'Current User',
-        providerImage: currentUser?.photoURL || 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg',
-        providerEmail: currentUser?.email
-      },
-      {
-        _id: '2',
-        serviceName: 'Home Electrical Installation',
-        description: 'Complete electrical services for homes and offices with licensed electricians.',
-        imageURL: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg',
-        price: '125',
-        serviceArea: 'New York',
-        providerName: currentUser?.displayName || 'Current User',
-        providerImage: currentUser?.photoURL || 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg',
-        providerEmail: currentUser?.email
-      }
-    ];
-    
-    setServices(mockServices);
-    setLoading(false);
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("http://localhost:3000/myservices", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error("Failed to fetch services");
+      const data = await response.json();
+      setServices(data);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load services");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteService = async (serviceId, serviceName) => {
-  // Show confirmation toast
   toast((t) => (
     <span>
       Are you sure you want to delete <b>"{serviceName}"</b>?
@@ -55,14 +42,22 @@ export default function ManageServices() {
         <button
           className="px-3 py-1 bg-red-600 text-white rounded"
           onClick={async () => {
-            toast.dismiss(t.id); 
-
+            toast.dismiss(t.id);
+            const token = localStorage.getItem("token");
             try {
-              // Simulate API call or logic
+              const res = await fetch(`http://localhost:3000/services/${serviceId}`, {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              });
+              if (!res.ok) throw new Error("Delete failed");
+
               setServices((prev) => prev.filter(service => service._id !== serviceId));
-              toast.success('Service deleted successfully!');
+              toast.success("Service deleted successfully!");
             } catch (error) {
-              toast.error('Failed to delete service');
+              console.error(error);
+              toast.error("Failed to delete service");
             }
           }}
         >
@@ -76,9 +71,7 @@ export default function ManageServices() {
         </button>
       </div>
     </span>
-  ), {
-    duration: Infinity,
-  });
+  ), { duration: Infinity });
 };
 
   if (loading) {

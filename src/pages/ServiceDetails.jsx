@@ -19,45 +19,12 @@ export default function ServiceDetails() {
   }, [id]);
 
   const fetchServiceDetails = async () => {
-    // Mock service data
-    const mockServices = {
-      '1': {
-        _id: '1',
-        serviceName: 'Plumbing Repair',
-        description: 'Professional plumbing services including pipe repair, leak fixing, and drain cleaning. Our certified plumbers ensure quality work with guaranteed results. We use modern equipment and techniques to diagnose and fix any plumbing issues in your home or office. From minor leaks to major pipe replacements, we handle it all with expertise and professionalism.',
-        imageURL: 'https://www.robinsonsplumbingservice.com/wp-content/uploads/2022/06/AdobeStock_187023351-1024x696.jpeg',
-        price: '89',
-        serviceArea: 'New York',
-        providerName: 'John Smith',
-        providerImage: 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg',
-        providerEmail: 'john@example.com'
-      },
-      '2': {
-        _id: '2',
-        serviceName: 'Electrical Installation',
-        description: 'Complete electrical services for homes and offices. Licensed electricians providing safe and reliable installations with modern equipment. We specialize in residential and commercial electrical work including wiring, outlets, switches, lighting fixtures, and electrical panel upgrades. All work is performed to code and comes with a satisfaction guarantee.',
-        imageURL: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg',
-        price: '125',
-        serviceArea: 'Los Angeles',
-        providerName: 'Sarah Johnson',
-        providerImage: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg',
-        providerEmail: 'sarah@example.com'
-      },
-      '3': {
-        _id: '3',
-        serviceName: 'AC Repair & Maintenance',
-        description: 'Expert air conditioning repair and maintenance services. Keep your home cool and comfortable year-round with our HVAC specialists. We provide comprehensive AC services including installation, repair, maintenance, and emergency services. Our technicians are trained on all major brands and use genuine parts for all repairs.',
-        imageURL: 'https://images.pexels.com/photos/2098428/pexels-photo-2098428.jpeg',
-        price: '95',
-        serviceArea: 'Chicago',
-        providerName: 'Mike Davis',
-        providerImage: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg',
-        providerEmail: 'mike@example.com'
-      }
-    };
 
-    const serviceData = mockServices[id] || mockServices['1'];
-    setService(serviceData);
+    const response = await fetch(`http://localhost:3000/services/${id}`);
+    const data = await response.json();
+
+    // const serviceData = mockServices[id] || mockServices['1'];
+    setService(data);
     setLoading(false);
   };
 
@@ -129,7 +96,7 @@ export default function ServiceDetails() {
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                     {service.serviceName}
                   </h1>
-                  
+
                   <div className="flex items-center space-x-4 mb-6">
                     <div className="flex items-center space-x-2">
                       <MapPin className="h-5 w-5 text-gray-500" />
@@ -199,7 +166,7 @@ export default function ServiceDetails() {
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                     Service Provider
                   </h3>
-                  
+
                   <div className="flex items-center space-x-4 mb-6">
                     <img
                       src={service.providerImage}

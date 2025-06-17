@@ -17,21 +17,21 @@ export default function AllServices() {
   useEffect(() => {
     filterServices();
   }, [searchTerm, services]);
-  
+
   // fetching data form mongodb
 
- const fetchAllServices = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/allservices');
-    const data = await response.json();
-    setServices(data);
-    setFilteredServices(data);
-  } catch (err) {
-    console.error('Failed to fetch services:', err);
-  } finally {
-    setLoading(false);
-  }
-};
+  const fetchAllServices = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/allservices');
+      const data = await response.json();
+      setServices(data);
+      setFilteredServices(data);
+    } catch (err) {
+      console.error('Failed to fetch services:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filterServices = () => {
     if (!searchTerm.trim()) {
@@ -101,18 +101,14 @@ export default function AllServices() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredServices.map((service, index) => (
-              
-               
-                <ServiceCard key={service._id} service={service} />
-              
+
+
+              <ServiceCard key={service._id} service={service} />
+
             ))}
           </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
+          <div className="text-center py-16">
             <div className="text-gray-400 dark:text-gray-500 mb-4">
               <Search className="h-16 w-16 mx-auto mb-4 opacity-50" />
             </div>
@@ -122,7 +118,7 @@ export default function AllServices() {
             <p className="text-gray-600 dark:text-gray-400">
               Try adjusting your search terms or browse all available services
             </p>
-          </motion.div>
+          </div>
         )}
       </div>
     </div>

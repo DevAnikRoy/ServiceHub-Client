@@ -14,7 +14,7 @@ export default function Register() {
     photoURL: ''
   });
   const [loading, setLoading] = useState(false);
-  
+
   const { signup, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
@@ -24,37 +24,89 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.password) {
-      toast.error('Please fill in all required fields');
+      toast.error("Please fill in all required fields");
       return;
     }
 
     if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
     setLoading(true);
     try {
-      await signup(formData.email, formData.password, formData.name, formData.photoURL);
-      toast.success('Account created successfully!');
-      navigate('/');
+      // 🔐 Firebase-এ user create
+      const userCredential = await signup(formData.email, formData.password);
+      const firebaseUser = userCredential.user;
+
+      // 📨 Backend-এ profile save
+      const res = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: firebaseUser.email,
+          imageUrl: formData.photoURL,
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+      }
+
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
+      toast.success("Account created successfully!");
+      navigate("/");
     } catch (error) {
-      toast.error(error.message || 'Failed to create account');
+      console.error(error);
+      toast.error(error.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
+
 
   const handleGoogleRegister = async () => {
     try {
-      await loginWithGoogle();
-      toast.success('Account created successfully!');
-      navigate('/');
+      const result = await loginWithGoogle();
+      const googleUser = result.user; // ✅ Fix here
+
+      const res = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: googleUser.displayName,
+          email: googleUser.email,
+          imageUrl: googleUser.photoURL
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+      }
+
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
+      toast.success("Signed up with Google!");
+      navigate("/");
     } catch (error) {
-      toast.error(error.message || 'Failed to create account with Google');
+      console.error("Google register failed:", error);
+      toast.error(error.message || "Google registration failed");
     }
   };
+
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
@@ -90,7 +142,7 @@ export default function Register() {
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="Enter your full name"
                 required
@@ -107,7 +159,7 @@ export default function Register() {
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="Enter your email"
                 required
@@ -124,7 +176,7 @@ export default function Register() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="Enter your password"
                 required
@@ -151,7 +203,7 @@ export default function Register() {
               <input
                 type="url"
                 value={formData.photoURL}
-                onChange={(e) => setFormData({...formData, photoURL: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, photoURL: e.target.value })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="Enter photo URL"
               />
