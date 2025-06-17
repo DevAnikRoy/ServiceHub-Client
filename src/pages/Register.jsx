@@ -37,11 +37,11 @@ export default function Register() {
 
     setLoading(true);
     try {
-      // 🔐 Firebase-এ user create
+      
       const userCredential = await signup(formData.email, formData.password);
       const firebaseUser = userCredential.user;
 
-      // 📨 Backend-এ profile save
+      
       const res = await fetch("http://localhost:3000/register", {
         method: "POST",
         headers: {
@@ -76,7 +76,7 @@ export default function Register() {
   const handleGoogleRegister = async () => {
     try {
       const result = await loginWithGoogle();
-      const googleUser = result.user; // ✅ Fix here
+      const googleUser = result.user;
 
       const res = await fetch("http://localhost:3000/register", {
         method: "POST",

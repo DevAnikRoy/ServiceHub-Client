@@ -42,12 +42,12 @@ export default function Login() {
             'Content-Type': 'application/json',
             
           },
-          body: JSON.stringify({ email: formData.email, password: formData.password })
+          body: JSON.stringify({ email: formData.email })
         })
           .then(res => res.json())  // parse JSON from response
           .then(data => {
             console.log(data.token);  // now you get the actual token
-            localStorage.setItem('tokens', data.token);
+            localStorage.setItem('token', data.token);
           })
           .catch(error => {
             console.error('Login error:', error);

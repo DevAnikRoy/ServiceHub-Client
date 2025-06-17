@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { 
+import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -27,35 +27,35 @@ export function AuthProvider({ children }) {
       displayName: name,
       photoURL: photoURL
     });
-    
+
     // Generate JWT token
     const userToken = await generateToken(result.user);
     localStorage.setItem('token', userToken);
     setToken(userToken);
-    
+
     return result;
   }
 
   async function login(email, password) {
     const result = await signInWithEmailAndPassword(auth, email, password);
-    
+
     // Generate JWT token
     const userToken = await generateToken(result.user);
     localStorage.setItem('token', userToken);
     setToken(userToken);
-    
+
     return result;
   }
 
   async function loginWithGoogle() {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    
+
     // Generate JWT token
     const userToken = await generateToken(result.user);
     localStorage.setItem('token', userToken);
     setToken(userToken);
-    
+
     return result;
   }
 
@@ -77,8 +77,30 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    const fetchMe = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const res = await fetch("http://localhost:3000/me", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data);
+      }
+    };
+
+    fetchMe();
+  }, [token]);
+
+
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
+      // setCurrentUser(user);
       if (user && !token) {
         const userToken = await generateToken(user);
         localStorage.setItem('token', userToken);
