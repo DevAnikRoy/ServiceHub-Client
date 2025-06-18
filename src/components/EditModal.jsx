@@ -45,67 +45,82 @@ export default function EditModal({ service, onClose, onUpdate }) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 px-4">
             <form
                 onSubmit={handleSubmit}
-                className="bg-white dark:bg-gray-800 p-6 rounded-lg w-[95%] max-w-lg space-y-4 shadow-xl"
+                className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-2xl w-full max-w-lg space-y-5 shadow-2xl border border-gray-200 dark:border-gray-700 transition-all duration-300"
             >
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white">Edit Service</h2>
-
+                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">
+                    ✏️ Edit Service
+                </h2>
+                
+                <p className='font-semibold'>Service Name:</p>
                 <input
                     type="text"
                     name="serviceName"
                     value={formData.serviceName}
                     onChange={handleChange}
                     placeholder="Service Name"
-                    className="input-style"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
+                <p className='font-semibold'>Service Price:</p>
                 <input
                     type="number"
                     name="price"
                     value={formData.price}
                     onChange={handleChange}
                     placeholder="Price"
-                    className="input-style"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
+                <p className='font-semibold'>Service Area:</p>
                 <input
                     type="text"
                     name="serviceArea"
                     value={formData.serviceArea}
                     onChange={handleChange}
                     placeholder="Service Area"
-                    className="input-style"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-
+                
+                <p className='font-semibold'>image Url:</p>
                 <input
                     type="text"
                     name="imageURL"
                     value={formData.imageURL}
                     onChange={handleChange}
                     placeholder="Image URL"
-                    className="input-style"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-
+                
+                <p className='font-semibold'>Description:</p>
                 <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
                     placeholder="Description"
-                    className="input-style"
                     rows={4}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
-                <div className="flex justify-end gap-2">
-                    <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
+                <div className="flex justify-end gap-3 pt-2">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="px-5 py-2 rounded-lg border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    >
                         Cancel
                     </button>
-                    <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+                    <button
+                        type="submit"
+                        className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm"
+                    >
                         Save
                     </button>
                 </div>
             </form>
         </div>
+
     );
 }
