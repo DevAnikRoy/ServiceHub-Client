@@ -13,7 +13,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const bookingData = {
       serviceId: service._id,
       serviceName: service.serviceName,
@@ -29,12 +29,25 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
     };
 
     try {
-      await onBook(bookingData);
-      toast.success('Service booked successfully!');
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:3000/bookservice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(bookingData)
+      });
+
+      if (!res.ok) throw new Error("Booking failed");
+
+      toast.success("Service booked successfully!");
       onClose();
     } catch (error) {
-      toast.error('Failed to book service');
+      console.error(error);
+      toast.error("Failed to book service");
     }
+
   };
 
   if (!isOpen) return null;
@@ -81,7 +94,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Service Name
@@ -118,7 +131,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Provider Name
@@ -144,7 +157,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Your Name
@@ -166,7 +179,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
                 <input
                   type="date"
                   value={formData.serviceTakingDate}
-                  onChange={(e) => setFormData({...formData, serviceTakingDate: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, serviceTakingDate: e.target.value })}
                   required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
@@ -180,7 +193,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
               </label>
               <textarea
                 value={formData.specialInstruction}
-                onChange={(e) => setFormData({...formData, specialInstruction: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, specialInstruction: e.target.value })}
                 rows={4}
                 placeholder="Any specific requirements, address details, or customizations..."
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -195,7 +208,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
                 type="text"
                 value={`$${service.price}`}
                 readOnly
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white font-bold text-emerald-600"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white font-bold text-emerald-600"
               />
             </div>
 

@@ -14,57 +14,24 @@ export default function BookedServices() {
   }, []);
 
   const fetchBookedServices = async () => {
-    // Mock data for booked services
-    const mockBookedServices = [
-      {
-        _id: '1',
-        serviceId: '3',
-        serviceName: 'AC Repair & Maintenance',
-        serviceImage: 'https://images.pexels.com/photos/2098428/pexels-photo-2098428.jpeg',
-        providerEmail: 'mike@example.com',
-        providerName: 'Mike Davis',
-        currentUserEmail: currentUser?.email,
-        currentUserName: currentUser?.displayName || currentUser?.email,
-        serviceTakingDate: '2024-01-15',
-        specialInstruction: 'Please check both living room and bedroom AC units. The living room unit is making unusual noise.',
-        price: '95',
-        serviceStatus: 'pending',
-        bookingDate: '2024-01-10'
-      },
-      {
-        _id: '2',
-        serviceId: '5',
-        serviceName: 'House Painting',
-        serviceImage: 'https://images.pexels.com/photos/1669799/pexels-photo-1669799.jpeg',
-        providerEmail: 'david@example.com',
-        providerName: 'David Wilson',
-        currentUserEmail: currentUser?.email,
-        currentUserName: currentUser?.displayName || currentUser?.email,
-        serviceTakingDate: '2024-01-20',
-        specialInstruction: 'Need exterior painting for front and side walls. Prefer light blue color similar to the sample shown.',
-        price: '450',
-        serviceStatus: 'working',
-        bookingDate: '2024-01-12'
-      },
-      {
-        _id: '3',
-        serviceId: '9',
-        serviceName: 'Carpet Cleaning',
-        serviceImage: 'https://images.pexels.com/photos/4099467/pexels-photo-4099467.jpeg',
-        providerEmail: 'michael@example.com',
-        providerName: 'Michael Brown',
-        currentUserEmail: currentUser?.email,
-        currentUserName: currentUser?.displayName || currentUser?.email,
-        serviceTakingDate: '2024-01-08',
-        specialInstruction: 'Deep cleaning required for living room carpet. There are some pet stains that need special attention.',
-        price: '120',
-        serviceStatus: 'completed',
-        bookingDate: '2024-01-05'
-      }
-    ];
-    
-    setBookedServices(mockBookedServices);
-    setLoading(false);
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch("http://localhost:3000/mybookings", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch bookings");
+
+      const data = await res.json();
+      setBookedServices(data);
+    } catch (error) {
+      console.error("Booking fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getStatusColor = (status) => {
