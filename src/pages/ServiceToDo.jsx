@@ -15,62 +15,41 @@ export default function ServiceToDo() {
   }, []);
 
   const fetchTodoServices = async () => {
-    // Mock data for services booked by others from current user
-    const mockTodoServices = [
-      
-      {
-        _id: '1',
-        serviceId: '1',
-        serviceName: 'Plumbing Repair',
-        serviceImage: 'https://images.pexels.com/photos/8486944/pexels-photo-8486944.jpeg',
-        providerEmail: currentUser?.email,
-        providerName: currentUser?.displayName || currentUser?.email,
-        currentUserEmail: 'customer1@example.com',
-        currentUserName: 'Alice Johnson',
-        serviceTakingDate: '2024-01-18',
-        specialInstruction: 'Kitchen sink is leaking and bathroom faucet needs repair. Please bring necessary tools.',
-        price: '89',
-        serviceStatus: 'pending',
-        bookingDate: '2024-01-15'
-      },
-      {
-        _id: '2',
-        serviceId: '2',
-        serviceName: 'Electrical Installation',
-        serviceImage: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg',
-        providerEmail: currentUser?.email,
-        providerName: currentUser?.displayName || currentUser?.email,
-        currentUserEmail: 'customer2@example.com',
-        currentUserName: 'Bob Smith',
-        serviceTakingDate: '2024-01-22',
-        specialInstruction: 'Need to install new outlets in the living room and replace old switches in bedrooms.',
-        price: '125',
-        serviceStatus: 'working',
-        bookingDate: '2024-01-16'
-      },
-      {
-        _id: '3',
-        serviceId: '1',
-        serviceName: 'Plumbing Repair',
-        serviceImage: 'https://images.pexels.com/photos/8486944/pexels-photo-8486944.jpeg',
-        providerEmail: currentUser?.email,
-        providerName: currentUser?.displayName || currentUser?.email,
-        currentUserEmail: 'customer3@example.com',
-        currentUserName: 'Carol Davis',
-        serviceTakingDate: '2024-01-12',
-        specialInstruction: 'Toilet repair needed urgently. Water keeps running and handle is loose.',
-        price: '89',
-        serviceStatus: 'completed',
-        bookingDate: '2024-01-10'
-      }
-    ];
-    
-    setTodoServices(mockTodoServices);
-    setLoading(false);
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch("http://localhost:3000/servicetodo", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (!res.ok) throw new Error("Failed to fetch service tasks");
+      const data = await res.json();
+      setTodoServices(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not load your service bookings");
+    } finally {
+      setLoading(false);
+    }
+
   };
 
   const handleStatusUpdate = async (bookingId, newStatus) => {
+    const token = localStorage.getItem("token");
     try {
+      const res = await fetch(`http://localhost:3000/updatestatus/${bookingId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!res.ok) throw new Error("Failed to update status");
+
+      // Local state update
       setTodoServices(prevServices =>
         prevServices.map(service =>
           service._id === bookingId
@@ -78,9 +57,11 @@ export default function ServiceToDo() {
             : service
         )
       );
+
       toast.success(`Service status updated to ${newStatus}`);
     } catch (error) {
-      toast.error('Failed to update service status');
+      console.error(error);
+      toast.error("Failed to update service status");
     }
   };
 
