@@ -13,13 +13,15 @@ export default function Home() {
   }, []);
 
   const fetchPopularServices = async () => {
-    
-    fetch('http://localhost:3000/featuredservices')
-    .then(res => res.json())
-    .then(data => setPopularServices(data));
-    
-    ;
+    try {
+      const res = await fetch("https://service-assingment-server.vercel.app/featuredservices");
+      const data = await res.json();
+      setPopularServices(data);
+    } catch (err) {
+      console.error("Failed to fetch popular services:", err);
+    }
   };
+
 
   const features = [
     {
@@ -57,7 +59,7 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
         <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/834892/pexels-photo-834892.jpeg')] bg-cover bg-center opacity-5"></div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -72,7 +74,7 @@ export default function Home() {
               <br />At Your Doorstep
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              Connect with trusted professionals for all your home repair and maintenance needs. 
+              Connect with trusted professionals for all your home repair and maintenance needs.
               Quality service, fair pricing, and complete satisfaction guaranteed.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

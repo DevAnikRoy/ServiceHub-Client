@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Calendar, MapPin, User, Mail, Clock, ChevronDown } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 export default function ServiceToDo() {
   const [todoServices, setTodoServices] = useState([]);
@@ -14,31 +15,47 @@ export default function ServiceToDo() {
     fetchTodoServices();
   }, []);
 
+  useEffect(() => {
+    if (currentUser) {
+      fetchTodoServices();
+    }
+  }, [currentUser]);
+
+
   const fetchTodoServices = async () => {
     const token = localStorage.getItem("token");
 
+    if (!token) {
+      setTodoServices([]);
+      setLoading(false);
+      toast.error("No auth token found. Please log in again.");
+      return;
+    }
+
     try {
-      const res = await fetch("http://localhost:3000/servicetodo", {
+      const res = await fetch("https://service-assingment-server.vercel.app/servicetodo", {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+
       if (!res.ok) throw new Error("Failed to fetch service tasks");
+
       const data = await res.json();
-      setTodoServices(data);
+      setTodoServices(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error(error);
+      console.error("Fetch Error:", error);
       toast.error("Could not load your service bookings");
     } finally {
       setLoading(false);
     }
-
   };
+
 
   const handleStatusUpdate = async (bookingId, newStatus) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:3000/updatestatus/${bookingId}`, {
+      const res = await fetch(`https://service-assingment-server.vercel.app/updatestatus/${bookingId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

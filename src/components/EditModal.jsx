@@ -20,7 +20,7 @@ export default function EditModal({ service, onClose, onUpdate }) {
         const token = localStorage.getItem("token");
 
         try {
-            const res = await fetch(`http://localhost:3000/services/${service._id}`, {
+            const res = await fetch(`https://service-assingment-server.vercel.app/services/${service._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

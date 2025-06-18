@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, User, Mail, Clock, DollarSign } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 export default function BookedServices() {
   const [bookedServices, setBookedServices] = useState([]);
@@ -13,11 +14,23 @@ export default function BookedServices() {
     fetchBookedServices();
   }, []);
 
+  useEffect(() => {
+    if (currentUser) {
+      fetchBookedServices();
+    }
+  }, [currentUser]);
+
+
   const fetchBookedServices = async () => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setBookedServices([]);
+      setLoading(false);
+      return;
+    }
 
     try {
-      const res = await fetch("http://localhost:3000/mybookings", {
+      const res = await fetch("https://service-assingment-server.vercel.app/mybookings", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -26,13 +39,14 @@ export default function BookedServices() {
       if (!res.ok) throw new Error("Failed to fetch bookings");
 
       const data = await res.json();
-      setBookedServices(data);
+      setBookedServices(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Booking fetch error:", error);
     } finally {
       setLoading(false);
     }
   };
+
 
   const getStatusColor = (status) => {
     switch (status) {

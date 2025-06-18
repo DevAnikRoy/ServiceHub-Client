@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
       photoURL
     });
 
-    const res = await fetch("http://localhost:3000/register", {
+    const res = await fetch("https://service-assingment-server.vercel.app/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -48,7 +48,7 @@ export function AuthProvider({ children }) {
   async function login(email, password) {
     const result = await signInWithEmailAndPassword(auth, email, password);
 
-    const res = await fetch("http://localhost:3000/login", {
+    const res = await fetch("https://service-assingment-server.vercel.app/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email })
@@ -66,7 +66,7 @@ export function AuthProvider({ children }) {
     const result = await signInWithPopup(auth, provider);
     const { email, displayName, photoURL } = result.user;
 
-    const res = await fetch("http://localhost:3000/register", {
+    const res = await fetch("https://service-assingment-server.vercel.app/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -94,7 +94,7 @@ export function AuthProvider({ children }) {
     const fetchMe = async () => {
       if (!token) return;
       try {
-        const res = await fetch("http://localhost:3000/me", {
+        const res = await fetch("https://service-assingment-server.vercel.app/me", {
           headers: {
             Authorization: `Bearer ${token}`
           }

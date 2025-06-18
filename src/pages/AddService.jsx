@@ -44,7 +44,7 @@ export default function AddService() {
 
       const token = localStorage.getItem("token");
 
-      const res = await fetch('http://localhost:3000/addservice', {
+      const res = await fetch('https://service-assingment-server.vercel.app/addservice', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

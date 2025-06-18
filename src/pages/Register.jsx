@@ -42,7 +42,7 @@ export default function Register() {
       const firebaseUser = userCredential.user;
 
       
-      const res = await fetch("http://localhost:3000/register", {
+      const res = await fetch("https://service-assingment-server.vercel.app/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -78,7 +78,7 @@ export default function Register() {
       const result = await loginWithGoogle();
       const googleUser = result.user;
 
-      const res = await fetch("http://localhost:3000/register", {
+      const res = await fetch("https://service-assingment-server.vercel.app/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

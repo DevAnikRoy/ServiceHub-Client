@@ -30,7 +30,7 @@ export default function BookingModal({ isOpen, onClose, service, onBook }) {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/bookservice", {
+      const res = await fetch("https://service-assingment-server.vercel.app/bookservice", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

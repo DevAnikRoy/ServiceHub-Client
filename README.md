@@ -1,12 +1,64 @@
-# React + Vite
+# ServiceHub 🛠️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack service booking platform where users can explore, book, and manage services—while providers can manage tasks and stay organized.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Live Demo
 
-## Expanding the ESLint configuration
+🌐 [https://servicehub-client.web.app](https://servicehub-client.web.app)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧩 Features
+
+### 👤 Users
+- 🔐 Authentication (Firebase)
+- 📚 Browse Featured & All Services
+- 🛒 Book services with schedule & instructions
+- 📄 View booked services with status badges (Pending / Working / Completed)
+
+### 🧑‍🔧 Providers
+- 🧭 View assigned services in “Service To-Do” dashboard
+- ✅ Track task status
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React + Vite + TailwindCSS + Framer Motion  
+- **Backend**: Node.js + Express + MongoDB (hosted on Vercel)
+- **Auth**: Firebase Authentication
+- **Deployment**: Firebase Hosting (client), Vercel (server)
+
+---
+
+## ⚙️ Setup Instructions
+
+1. **Clone This Repo**
+   ```bash
+   git clone https://github.com/your-username/servicehub.git
+   cd servicehub
+    Install Dependencies
+
+bash
+npm install
+Environment Variables Create a .env file in the root directory with:
+
+VITE_FIREBASE_API_KEY=xxx
+VITE_FIREBASE_AUTH_DOMAIN=xxx
+VITE_FIREBASE_PROJECT_ID=xxx
+VITE_BACKEND_URL=https://service-assingment-server.vercel.app
+Run Locally
+
+bash
+npm run dev
+📁 Folder Structure (Client)
+src/
+│
+├── components/     → Reusable UI components
+├── pages/          → Route-based pages
+├── contexts/       → Auth context provider
+├── utils/          → Helper functions & config
+├── App.jsx         
+├── main.jsx        

@@ -19,19 +19,25 @@ export default function ServiceDetails() {
   }, [id]);
 
   const fetchServiceDetails = async () => {
+    try {
+      const response = await fetch(`https://service-assingment-server.vercel.app/services/${id}`);
+      if (!response.ok) throw new Error("Failed to fetch service details");
 
-    const response = await fetch(`http://localhost:3000/services/${id}`);
-    const data = await response.json();
-
-    // const serviceData = mockServices[id] || mockServices['1'];
-    setService(data);
-    setLoading(false);
+      const data = await response.json();
+      setService(data);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Could not load service details");
+    } finally {
+      setLoading(false);
+    }
   };
 
+
   const handleBookService = async (bookingData) => {
-    // Simulate booking API call
-    console.log('Booking service:', bookingData);
-    // In a real app, this would make an API call to save the booking
+
+    // console.log('Booking service:', bookingData);
+
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(bookingData);

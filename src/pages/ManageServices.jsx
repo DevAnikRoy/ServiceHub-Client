@@ -23,7 +23,7 @@ export default function ManageServices() {
   const fetchMyServices = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:3000/myservices", {
+      const response = await fetch("https://service-assingment-server.vercel.app/myservices", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -50,7 +50,7 @@ export default function ManageServices() {
               toast.dismiss(t.id);
               const token = localStorage.getItem("token");
               try {
-                const res = await fetch(`http://localhost:3000/services/${serviceId}`, {
+                const res = await fetch(`https://service-assingment-server.vercel.app/services/${serviceId}`, {
                   method: "DELETE",
                   headers: {
                     Authorization: `Bearer ${token}`

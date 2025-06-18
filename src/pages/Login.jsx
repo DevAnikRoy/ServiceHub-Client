@@ -34,9 +34,9 @@ export default function Login() {
     setLoading(true);
     try {
       const result = await login(formData.email, formData.password);
-      console.log(result)
+      // console.log(result)
       if (result.user.uid) {
-        fetch('http://localhost:3000/login', {
+        fetch('https://service-assingment-server.vercel.app/login', {
           method: "POST",
           headers: {
             'Content-Type': 'application/json',
@@ -44,9 +44,9 @@ export default function Login() {
           },
           body: JSON.stringify({ email: formData.email })
         })
-          .then(res => res.json())  // parse JSON from response
+          .then(res => res.json())  
           .then(data => {
-            console.log(data.token);  // now you get the actual token
+            // console.log(data.token);  
             localStorage.setItem('token', data.token);
           })
           .catch(error => {

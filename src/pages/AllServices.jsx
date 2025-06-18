@@ -22,7 +22,7 @@ export default function AllServices() {
 
   const fetchAllServices = async () => {
     try {
-      const response = await fetch('http://localhost:3000/allservices');
+      const response = await fetch('https://service-assingment-server.vercel.app/allservices');
       const data = await response.json();
       setServices(data);
       setFilteredServices(data);
