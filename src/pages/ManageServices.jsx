@@ -4,10 +4,15 @@ import { Edit, Trash2, Plus, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import EditModal from "../components/EditModal";
+
 
 export default function ManageServices() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
+
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -35,44 +40,44 @@ export default function ManageServices() {
   };
 
   const handleDeleteService = async (serviceId, serviceName) => {
-  toast((t) => (
-    <span>
-      Are you sure you want to delete <b>"{serviceName}"</b>?
-      <div className="mt-2 flex justify-end gap-2">
-        <button
-          className="px-3 py-1 bg-red-600 text-white rounded"
-          onClick={async () => {
-            toast.dismiss(t.id);
-            const token = localStorage.getItem("token");
-            try {
-              const res = await fetch(`http://localhost:3000/services/${serviceId}`, {
-                method: "DELETE",
-                headers: {
-                  Authorization: `Bearer ${token}`
-                }
-              });
-              if (!res.ok) throw new Error("Delete failed");
+    toast((t) => (
+      <span>
+        Are you sure you want to delete <b>"{serviceName}"</b>?
+        <div className="mt-2 flex justify-end gap-2">
+          <button
+            className="px-3 py-1 bg-red-600 text-white rounded"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              const token = localStorage.getItem("token");
+              try {
+                const res = await fetch(`http://localhost:3000/services/${serviceId}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+                });
+                if (!res.ok) throw new Error("Delete failed");
 
-              setServices((prev) => prev.filter(service => service._id !== serviceId));
-              toast.success("Service deleted successfully!");
-            } catch (error) {
-              console.error(error);
-              toast.error("Failed to delete service");
-            }
-          }}
-        >
-          Yes
-        </button>
-        <button
-          className="px-3 py-1 bg-gray-300 text-black rounded"
-          onClick={() => toast.dismiss(t.id)}
-        >
-          Cancel
-        </button>
-      </div>
-    </span>
-  ), { duration: Infinity });
-};
+                setServices((prev) => prev.filter(service => service._id !== serviceId));
+                toast.success("Service deleted successfully!");
+              } catch (error) {
+                console.error(error);
+                toast.error("Failed to delete service");
+              }
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="px-3 py-1 bg-gray-300 text-black rounded"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </span>
+    ), { duration: Infinity });
+  };
 
   if (loading) {
     return (
@@ -155,6 +160,10 @@ export default function ManageServices() {
                           <Eye className="h-5 w-5" />
                         </Link>
                         <button
+                          onClick={() => {
+                            setSelectedService(service);
+                            setEditModalOpen(true);
+                          }}
                           className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg transition-colors"
                           title="Edit Service"
                         >
@@ -199,6 +208,22 @@ export default function ManageServices() {
           </motion.div>
         )}
       </div>
+
+      {editModalOpen && selectedService && (
+        <EditModal
+          service={selectedService}
+          onClose={() => {
+            setEditModalOpen(false);
+            setSelectedService(null);
+          }}
+          onUpdate={(updated) => {
+            setServices((prev) =>
+              prev.map((s) => (s._id === updated._id ? updated : s))
+            );
+          }}
+        />
+      )}
+
     </div>
   );
 }
