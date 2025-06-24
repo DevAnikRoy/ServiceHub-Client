@@ -31,6 +31,18 @@ A full-stack service booking platform where users can explore, book, and manage 
 - **Auth**: Firebase Authentication
 - **Deployment**: Firebase Hosting (client), Vercel (server)
 
+- "dependencies": {
+    "dotenv": "^16.5.0",
+    "firebase": "^10.14.1",
+    "framer-motion": "^11.3.30",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.26.1"
+  }
+
 ---
 
 ## ⚙️ Setup Instructions
