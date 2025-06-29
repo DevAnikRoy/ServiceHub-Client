@@ -6,7 +6,7 @@ A full-stack service booking platform where users can explore, book, and manage 
 
 ## 🚀 Live Demo
 
-🌐 [https://servicehub-client.web.app](https://servicehub-client.web.app)
+🌐  https://service-assignment-f070a.web.app/
 
 ---
 
